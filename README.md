@@ -2,6 +2,8 @@
 
 Simple SVG clock created with Snap - http://snapsvg.io/
 
+More info on my blog post at http://simonrjones.net/2014/03/analog-clocks-in-svg/
+
 Simon R Jones, Studio 24 - www.studio24.net
 
 ## Usage
@@ -13,9 +15,9 @@ Valid arguments passed to Clock are `Clock(svgId, offset|hours, minutes, seconds
 * svgId - ID of the svg element to display clock in, should be 300x300 in size
 * offset|hours - Either offset to the current local time in +/- hours, or hour to set clock to (if minutes is set) 
 * minutes - Minutes to set clock to. If this argument is set, the second argument is treated as the hour
-* seconds - Seconds to set clock to
+* seconds - Seconds to set clock to (optional)
 
-You can set the time with `clock.setTime(hours, minutes, seconds)`, for example `clock.setTime(21, 37, 0)`
+You can set the time with `clock.setTime(hours, minutes, seconds)`, for example `clock.setTime(21, 37, 0)` or `clock.setTime(21, 37)`
 
 Start a clock with `clock.startClock()`
 
