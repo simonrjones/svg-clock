@@ -1,140 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>SVG Clock examples</title>
   <script src="snap.svg-min.js"></script>
-  <script>
-  Clock = function(){
-
-    var s, hourHand, minuteHand, secondHand, hour, minute, second;
-
-    function init() {
-      // Setup clock face
-      s = Snap("#clock");
-      drawClockFace();
-
-      // Update clock every second
-      setInterval(function(){
-        animateHands();
-      }, 1000);
-    }
-
-    function drawClockFace() {
-      var clockFace = s.circle(150, 150, 100);
-      clockFace.attr({
-        fill: "#FFF",
-          stroke: "#000",
-          strokeWidth: 4
-      });
-
-      // Draw hours
-      for (var x=1;x<=12;x++) {
-          var hourStroke = s.line(150,60,150,80);
-          hourStroke.attr({
-            stroke: "#000",
-            strokeWidth: 4
-          });
-
-          var t = new Snap.Matrix();
-          t.rotate((360/12)*x, 150, 150);
-          hourStroke.transform(t);
-      }
-
-      hourHand = s.line(150,150,150,110);
-      hourHand.attr({
-        stroke: "#000",
-        strokeWidth: 4
-      });
-
-      minuteHand = s.line(150,150,150,60);
-      minuteHand.attr({
-        stroke: "#000",
-        strokeWidth: 3
-      });
-
-      secondHand = s.line(150,150,150,60);
-      secondHand.attr({
-        stroke: "#000",
-        strokeWidth: 1
-      });
-
-      // Centre point
-      var clockCenter = s.circle(150, 150, 6);
-      clockCenter.attr({
-        fill: "#000"
-      });
-
-      // Set initial location of hands
-      updateTime();
-      var t = new Snap.Matrix();
-      t.rotate(getSecondDegree(second), 150, 150);
-      secondHand.transform(t);
-
-      var t = new Snap.Matrix();
-      t.rotate(getHourDegree(hour, minute), 150, 150);
-      hourHand.transform(t);
-
-      var t = new Snap.Matrix();
-      t.rotate(getMinuteDegree(minute), 150, 150);
-      minuteHand.transform(t);
-    }
-
-    function updateTime()
-    {
-      // Get time
-      var now = new Date();
-      hour = now.getHours();
-      if (hour > 12) {
-        hour -= 12;
-      }
-      minute = now.getMinutes();
-      second = now.getSeconds();
-    }
-
-    function animateHands() {
-      updateTime();
-
-      // Move second hand
-      var t = new Snap.Matrix();
-      t.rotate(getSecondDegree(second), 150, 150);
-      secondHand.animate({transform: t}, 100);
-
-      // Move hour & minute?
-      if (second == 0) {
-        var t = new Snap.Matrix();
-        t.rotate(getHourDegree(hour, minute), 150, 150);
-        hourHand.animate({transform: t}, 100);
-
-        var t = new Snap.Matrix();
-        t.rotate(getMinuteDegree(minute), 150, 150);
-        minuteHand.animate({transform: t}, 100);
-      }
-    }
-
-    function getSecondDegree(second) {
-      return (360/60) * second;
-    }
-
-    function getMinuteDegree(minute) {
-      return (360/60) * minute;
-    }
-
-    function getHourDegree(hour, minute) {
-      var increment = Math.round((30/60) * minute);
-      return ((360/12) * hour) + increment;
-    }
-
-    return {
-      init: init
-    }
-  }();
-
-  </script>
+  <script src="clock.js"></script>
+  <style>
+    body { font-family: sans-serif; }
+    div { width: 300px; heigth: 350px; float: left; text-align: center; margin-bottom: 2em; }
+    h1 { font-size: 1.6em; }
+    h2 { font-size: 1.2em; }
+  </style>
 </head>
 <body>
+  <h1>SVG Clock examples</h1>
+  <div>
+  <svg id="clockUK" width="300" height="300">
+  <h2>London (or your local time)</h2>
+  </div>
+  <div>
+  <svg id="clockNYC" width="300" height="300">
+  <h2>New York (-5)</h2>
+  </div>
+  <div>
   <svg id="clock" width="300" height="300">
+  <h2>Fixed time (21:38)</h2>
+  </div>
+  <p><a href="http://www.studio24.net">Studio 24</a></p>
+
 <script>
-  // Start clock
-  Clock.init();
+  // Start clocks
+  var uk = new Clock("clockUK");
+  uk.startClock();
+
+  var nyc = new Clock("clockNYC", -4);
+  nyc.startClock();
+
+  var clock = new Clock("clock", 21, 39);
+  clock.hideSecondHand();
 </script>
 </body>
 </html>
