@@ -5,7 +5,6 @@ function Clock(svgId, offset, minute, second) {
   this.showSeconds = true;
 
   // Set defaults
-  this.updateTime();
   this.offset = 0;
 
   // Set time or offset?
@@ -21,6 +20,9 @@ function Clock(svgId, offset, minute, second) {
   } else if (offset != undefined) {
     // Set offset
     this.offset = offset;
+    this.updateTime();
+  } else {
+    this.updateTime();
   }
 
   // Set up clock  
