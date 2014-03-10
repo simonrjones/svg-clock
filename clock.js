@@ -32,10 +32,6 @@ Clock.prototype.hideSecondHand = function() {
   this.secondHand.remove();
 }
 
-Clock.prototype.showSecondHand = function() {
-  this.showSeconds = true;
-}
-
 Clock.prototype.drawClockFace = function() {
     var clockFace = this.s.circle(150, 150, 100);
     clockFace.attr({
