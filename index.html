@@ -20,6 +20,10 @@
   <h2>London (or your local time)</h2>
   </div>
   <div>
+  <svg id="clockUKBounce" width="300" height="300">
+  <h2>2 hours ahead with hand bounce</h2>
+  </div>
+  <div>
   <svg id="clockNYC" width="300" height="300">
   <h2>New York (-5)</h2>
   </div>
@@ -33,6 +37,9 @@
   // Start clocks
   var uk = new Clock("clockUK");
   uk.startClock();
+
+  var ukbounce = new Clock("clockUKBounce", { showSeconds: true, offset: 2, movement: "bounce" });
+  ukbounce.startClock();
 
   var nyc = new Clock("clockNYC", -5);
   nyc.startClock();

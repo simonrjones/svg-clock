@@ -3,27 +3,62 @@ function Clock(svgId, offset, minute, second) {
 
   // Setup clock face
   this.s = new Snap("#" + svgId);
-  this.showSeconds = true;
 
   // Set defaults
+  this.showSeconds = true;
   this.offset = 0;
+  this.hour = 0;
+  this.minute = 0;
+  this.second = 0;
+  this.movement = "normal";
 
-  // Set time or offset?
-  if (minute !== undefined) {
-    // Set time
-    this.hour = offset;
-    this.minute = minute;
-    if (second !== undefined) {
-      this.second = second;
-    } else {
-      this.second = 0;
+  // if offset is an object it'll hold the configuration settings
+  if (offset !== null && typeof offset === "object") {
+    var options = offset;
+    if ("movement" in options) {
+      if (options.movement === "bounce") {
+        this.movement = "bounce";
+      }
     }
-  } else if (offset !== undefined) {
-    // Set offset
-    this.offset = offset;
-    this.updateTime();
+    if ("showSeconds" in options) {
+      this.showSeconds = options.showSeconds;
+    }
+    if ("offset" in options) {
+      this.offset = options.offset;
+      this.updateTime();
+    } else if ("hours" in options || "minutes" in options || "seconds" in options) {
+      if ("hours" in options) {
+        this.hour = options.hours;
+      }
+      if ("minutes" in options) {
+        this.minute = options.minutes;
+      }
+      if ("seconds" in options) {
+        this.second = options.seconds;
+      }
+    } else {
+      this.updateTime();
+    }
+
+  // else use parameters for configuration settings
   } else {
-    this.updateTime();
+    // Set time or offset?
+    if (minute !== undefined) {
+      // Set time
+      this.hour = offset;
+      this.minute = minute;
+      if (second !== undefined) {
+        this.second = second;
+      } else {
+        this.second = 0;
+      }
+    } else if (offset !== undefined) {
+      // Set offset
+      this.offset = offset;
+      this.updateTime();
+    } else {
+      this.updateTime();
+    }
   }
 
   // Set up clock
@@ -68,11 +103,13 @@ Clock.prototype.drawClockFace = function() {
     strokeWidth: 3
   });
 
-  this.secondHand = this.s.line(150,150,150,60);
-  this.secondHand.attr({
-    stroke: "#000",
-    strokeWidth: 1
-  });
+  if (this.showSeconds) {
+    this.secondHand = this.s.line(150,150,150,60);
+    this.secondHand.attr({
+      stroke: "#000",
+      strokeWidth: 1
+    });
+  }
 
   // Centre point
   var clockCenter = this.s.circle(150, 150, 6);
@@ -81,10 +118,12 @@ Clock.prototype.drawClockFace = function() {
   });
 
   // Set initial location of hands
-  var s = new Snap.Matrix();
-  s.rotate(this.getSecondDegree(this.second), 150, 150);
-  this.secondHand.transform(s);
-
+  if (this.showSeconds) {
+    var s = new Snap.Matrix();
+    s.rotate(this.getSecondDegree(this.second), 150, 150);
+    this.secondHand.transform(s);
+  }
+  
   var h = new Snap.Matrix();
   h.rotate(this.getHourDegree(this.hour, this.minute), 150, 150);
   this.hourHand.transform(h);
@@ -120,20 +159,32 @@ Clock.prototype.animateHands = function() {
 
   // Move second hand
   if (this.showSeconds) {
-    var t = new Snap.Matrix();
-    t.rotate(this.getSecondDegree(this.second), 150, 150);
-    this.secondHand.animate({transform: t}, 100);
+    var s = new Snap.Matrix();
+    s.rotate(this.getSecondDegree(this.second), 150, 150);
+    if (this.movement === "bounce") {
+      this.secondHand.animate({transform: s}, 400, mina.bounce);
+    } else {
+      this.secondHand.animate({transform: s}, 100);
+    }
   }
 
   // Move hour & minute?
   if (this.second === 0) {
     var h = new Snap.Matrix();
     h.rotate(this.getHourDegree(this.hour, this.minute), 150, 150);
-    this.hourHand.animate({transform: h}, 100);
+    if (this.movement === "bounce") {
+      this.hourHand.animate({transform: h}, 400, mina.bounce);
+    } else {
+      this.hourHand.animate({transform: h}, 100);
+    }
 
     var m = new Snap.Matrix();
     m.rotate(this.getMinuteDegree(this.minute), 150, 150);
-    this.minuteHand.animate({transform: m}, 100);
+    if (this.movement === "bounce") {
+      this.minuteHand.animate({transform: m}, 400, mina.bounce);
+    } else {
+      this.minuteHand.animate({transform: m}, 100);
+    }
   }
 };
 

@@ -5,6 +5,8 @@ Simple SVG clock created with Snap - http://snapsvg.io/
 More info on my blog post at http://simonrjones.net/2014/03/analog-clocks-in-svg/
 
 Simon R Jones, Studio 24 - www.studio24.net
+Robert Price - www.robertprice.co.uk
+
 
 ## Usage
 
@@ -21,7 +23,7 @@ You can set the time with `clock.setTime(hours, minutes, seconds)`, for example 
 
 Start a clock with `clock.startClock()`
 
-Stop a clock with `clock.startClock()`
+Stop a clock with `clock.stopClock()`
 
 Hide the second hand with `clock.hideSecondHand()`
 
@@ -57,4 +59,31 @@ It's best not to start a clock which you've set to a specific time. If you do st
     <script>
       var clock = new Clock("clock", 21, 45);
       clock.hideSecondHand();
+    </script>
+
+
+## Alternative Usage
+
+Instead of passing parameters as an array, they can be passed in an object as the second parameter.
+
+Define a clock with `var clock = new Clock("clock", options)`
+
+Valid options are
+
+* offset - The offset to the current local time in +/- hours.
+* hours - The hour to set the clock to.
+* minutes - the mintues to set the clock to.
+* seconds - the seconds to set the clock to.
+* movement - "normal" or "bounce", defines how the hands move on the clock. "normal" gives smooth movement, whereas "bounce" gives a classic BBC bounce to hands as they move into position. Default "normal".
+* showSeconds - true or false, depending on wether to show the second hand or not. Default true.
+
+As with the classic usage, if an offset is added, then hours, minutes and seconds are ignored.
+
+If you want the clock to animate, you still need start it using the .startClock() method.
+
+### Display a clock with a +10 hour offset, and with a bounce movement
+
+    <script>
+      var bouncer = new Clock("bouncer", { movement: "bounce", offset: 10, showSeconds: true });
+      bouncer.startClock();
     </script>
